@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html dir="ltr" lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=5.0" />
+    <title>Stencil Component Starter</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reset-css@5.0.2/reset.min.css" />
+
+    <script type="module" src="/build/widget.esm.js"></script>
+    <script nomodule src="/build/widget.js"></script>
+    <style>
+      body {
+        font-family: 'Inter', sans-serif;
+        color: #fff;
+        background-color: #232323;
+      }
+
+      h1 {
+        margin-bottom: 10px;
+        font-size: 20px;
+        font-weight: 600;
+      }
+    </style>
+  </head>
+  <body>
+    <deepgram-widget client-token="0123456789abcdef0123456789abcdef"></deepgram-widget>
+
+    
+    <div style="column-count: 2; column-gap: 20px;">
+      <div style="break-inside: avoid; padding: 20px; background-color: #333; margin-bottom: 20px;">
+        <h1>Orb</h1>
+        <p>Size: 200</p>
+        <p>Debug: true</p>
+        <deepgram-orb size="200" debug="true"></deepgram-orb>
+      </div>
+      <div style="break-inside: avoid; padding: 20px; background-color: #333; margin-bottom: 20px;">
+        <h1>Orb</h1>
+        <p>Size: 200</p>
+        <p>Line Width Multiplier: 5</p>
+        <deepgram-orb size="200" line-width-multiplier="5"></deepgram-orb>
+      </div>
+    </div>
+  </body>
+</html>
