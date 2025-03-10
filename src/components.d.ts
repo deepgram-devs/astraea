@@ -5,119 +5,12 @@
  * It contains typing information for all components that exist in this project.
  */
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
-import { AgentEventDetail } from "./components/types";
-import { VoiceBotStatus } from "./components/enums";
-export { AgentEventDetail } from "./components/types";
-export { VoiceBotStatus } from "./components/enums";
 export namespace Components {
-    interface DeepgramAgent {
-        "apiKey": string;
-        "config": string;
-        "idleTimeoutMs": string;
-        "url": string;
-    }
-    interface DeepgramOrb {
-        /**
-          * The volume of the agent.
-         */
-        "agentVolume": number;
-        /**
-          * The speed at which the colors move along their lines. A "period" is the time to return to their original position. Divide by the current state's time speed for actual rotation period.
-         */
-        "averageRotationPeriodSeconds": number;
-        /**
-          * When "chattering", the number of frames it takes for one line to catch up to the next.
-         */
-        "chatterFrameLag": number;
-        /**
-          * How much to increase/decrease the circle size when "chattering".
-         */
-        "chatterSizeMultiplier": number;
-        /**
-          * How many frames to use when calculating the chatter effect for a line. Larger windows have a smoothing effect.
-         */
-        "chatterWindowSize": number;
-        /**
-          * Display circles at arc endpoints, bottom of animation, and center.
-         */
-        "debug": boolean;
-        /**
-          * How far down to deflate (in radii) in the maximum state.
-         */
-        "deflatePull": number;
-        /**
-          * Total transition time when deflating.
-         */
-        "deflateTransitionTimeMs": number;
-        /**
-          * Total transition time when inflating.
-         */
-        "inflateTransitionTimeMs": number;
-        /**
-          * Multiplier to adjust the width of all lines. A value of 1 means default width, values less than 1 will make lines thinner, and values greater than 1 will make them thicker.
-         */
-        "lineWidthMultiplier": number;
-        /**
-          * The state of the orb.
-         */
-        "orbState": VoiceBotStatus;
-        /**
-          * The period for the constant pulsing when the agent is on.
-         */
-        "pulsePeriodSeconds": number;
-        /**
-          * How much larger/smaller than "normal" size (as a percentage) the pulse gets.
-         */
-        "pulseSizeMultiplier": number;
-        /**
-          * the "base" rocking period. Divide by the current state's time speed for actual rocking period.
-         */
-        "rockingPeriodSeconds": number;
-        /**
-          * Total transition time when switching max rocking angle.
-         */
-        "rockingTransitionTimeMs": number;
-        /**
-          * The size of the orb.
-         */
-        "size": number;
-        /**
-          * The volume of the user.
-         */
-        "userVolume": number;
-    }
     interface DeepgramWidget {
         "clientToken": string;
     }
 }
-export interface DeepgramAgentCustomEvent<T> extends CustomEvent<T> {
-    detail: T;
-    target: HTMLDeepgramAgentElement;
-}
 declare global {
-    interface HTMLDeepgramAgentElementEventMap {
-        "agentEvent": AgentEventDetail;
-    }
-    interface HTMLDeepgramAgentElement extends Components.DeepgramAgent, HTMLStencilElement {
-        addEventListener<K extends keyof HTMLDeepgramAgentElementEventMap>(type: K, listener: (this: HTMLDeepgramAgentElement, ev: DeepgramAgentCustomEvent<HTMLDeepgramAgentElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
-        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
-        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
-        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
-        removeEventListener<K extends keyof HTMLDeepgramAgentElementEventMap>(type: K, listener: (this: HTMLDeepgramAgentElement, ev: DeepgramAgentCustomEvent<HTMLDeepgramAgentElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
-        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
-        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
-        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
-    }
-    var HTMLDeepgramAgentElement: {
-        prototype: HTMLDeepgramAgentElement;
-        new (): HTMLDeepgramAgentElement;
-    };
-    interface HTMLDeepgramOrbElement extends Components.DeepgramOrb, HTMLStencilElement {
-    }
-    var HTMLDeepgramOrbElement: {
-        prototype: HTMLDeepgramOrbElement;
-        new (): HTMLDeepgramOrbElement;
-    };
     interface HTMLDeepgramWidgetElement extends Components.DeepgramWidget, HTMLStencilElement {
     }
     var HTMLDeepgramWidgetElement: {
@@ -125,95 +18,14 @@ declare global {
         new (): HTMLDeepgramWidgetElement;
     };
     interface HTMLElementTagNameMap {
-        "deepgram-agent": HTMLDeepgramAgentElement;
-        "deepgram-orb": HTMLDeepgramOrbElement;
         "deepgram-widget": HTMLDeepgramWidgetElement;
     }
 }
 declare namespace LocalJSX {
-    interface DeepgramAgent {
-        "apiKey"?: string;
-        "config"?: string;
-        "idleTimeoutMs"?: string;
-        "onAgentEvent"?: (event: DeepgramAgentCustomEvent<AgentEventDetail>) => void;
-        "url"?: string;
-    }
-    interface DeepgramOrb {
-        /**
-          * The volume of the agent.
-         */
-        "agentVolume"?: number;
-        /**
-          * The speed at which the colors move along their lines. A "period" is the time to return to their original position. Divide by the current state's time speed for actual rotation period.
-         */
-        "averageRotationPeriodSeconds"?: number;
-        /**
-          * When "chattering", the number of frames it takes for one line to catch up to the next.
-         */
-        "chatterFrameLag"?: number;
-        /**
-          * How much to increase/decrease the circle size when "chattering".
-         */
-        "chatterSizeMultiplier"?: number;
-        /**
-          * How many frames to use when calculating the chatter effect for a line. Larger windows have a smoothing effect.
-         */
-        "chatterWindowSize"?: number;
-        /**
-          * Display circles at arc endpoints, bottom of animation, and center.
-         */
-        "debug"?: boolean;
-        /**
-          * How far down to deflate (in radii) in the maximum state.
-         */
-        "deflatePull"?: number;
-        /**
-          * Total transition time when deflating.
-         */
-        "deflateTransitionTimeMs"?: number;
-        /**
-          * Total transition time when inflating.
-         */
-        "inflateTransitionTimeMs"?: number;
-        /**
-          * Multiplier to adjust the width of all lines. A value of 1 means default width, values less than 1 will make lines thinner, and values greater than 1 will make them thicker.
-         */
-        "lineWidthMultiplier"?: number;
-        /**
-          * The state of the orb.
-         */
-        "orbState"?: VoiceBotStatus;
-        /**
-          * The period for the constant pulsing when the agent is on.
-         */
-        "pulsePeriodSeconds"?: number;
-        /**
-          * How much larger/smaller than "normal" size (as a percentage) the pulse gets.
-         */
-        "pulseSizeMultiplier"?: number;
-        /**
-          * the "base" rocking period. Divide by the current state's time speed for actual rocking period.
-         */
-        "rockingPeriodSeconds"?: number;
-        /**
-          * Total transition time when switching max rocking angle.
-         */
-        "rockingTransitionTimeMs"?: number;
-        /**
-          * The size of the orb.
-         */
-        "size"?: number;
-        /**
-          * The volume of the user.
-         */
-        "userVolume"?: number;
-    }
     interface DeepgramWidget {
         "clientToken"?: string;
     }
     interface IntrinsicElements {
-        "deepgram-agent": DeepgramAgent;
-        "deepgram-orb": DeepgramOrb;
         "deepgram-widget": DeepgramWidget;
     }
 }
@@ -221,8 +33,6 @@ export { LocalJSX as JSX };
 declare module "@stencil/core" {
     export namespace JSX {
         interface IntrinsicElements {
-            "deepgram-agent": LocalJSX.DeepgramAgent & JSXBase.HTMLAttributes<HTMLDeepgramAgentElement>;
-            "deepgram-orb": LocalJSX.DeepgramOrb & JSXBase.HTMLAttributes<HTMLDeepgramOrbElement>;
             "deepgram-widget": LocalJSX.DeepgramWidget & JSXBase.HTMLAttributes<HTMLDeepgramWidgetElement>;
         }
     }

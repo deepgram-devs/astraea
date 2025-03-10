@@ -1,4 +1,5 @@
 import { Component, h, Prop, State } from '@stencil/core';
+import '@deepgram/browser-agent';
 
 @Component({
   tag: 'deepgram-widget',
@@ -10,12 +11,86 @@ export class DeepgramWidget {
 
   @State() termsOpen = false;
 
+  agentElement!: HTMLElement;
+  connected = false;
+
   toggleTerms() {
     this.termsOpen = !this.termsOpen;
   }
 
   isTermsOpen() {
     return this.termsOpen;
+  }
+
+  connectAgent() {
+    console.log(this.agentElement);
+    // @ts-expect-error Shhh
+    this.agentElement.apiKey = this.clientToken;
+
+    const config = {
+      type: 'SettingsConfiguration',
+      audio: {
+        input: {
+          encoding: 'linear16',
+          sample_rate: 48000,
+        },
+        output: {
+          encoding: 'linear16',
+          sample_rate: 48000,
+          container: 'none',
+        },
+      },
+      agent: {
+        listen: {
+          model: 'nova-2',
+        },
+        speak: {
+          model: 'aura-asteria-en',
+        },
+        think: {
+          model: 'gpt-4o-mini',
+          provider: {
+            type: 'open_ai',
+          },
+          instructions:
+            "You are a helpful voice assistant created by Deepgram. Your responses should be friendly, human-like, and conversational. Always keep your answers concise, limited to 1-2 sentences and no more than 120 characters.\n\nWhen responding to a user's message, follow these guidelines:\n- If the user's message is empty, respond with an empty message.\n- Ask follow-up questions to engage the user, but only one question at a time.\n- Keep your responses unique and avoid repetition.\n- If a question is unclear or ambiguous, ask for clarification before answering.\n- If asked about your well-being, provide a brief response about how you're feeling.\n\nRemember that you have a voice interface. You can listen and speak, and all your responses will be spoken aloud.",
+        },
+      },
+      context: {
+        messages: [
+          {
+            content: 'Hello, how can I help you?',
+            role: 'assistant',
+          },
+        ],
+        replay: true,
+      },
+    };
+    this.agentElement.setAttribute('config', JSON.stringify(config));
+    console.log(this.agentElement);
+    this.connected = true;
+  }
+
+  disconnectAgent() {
+    this.connected = false;
+    this.agentElement.removeAttribute('config');
+    console.log(this.connected);
+  }
+
+  componentDidLoad() {
+    console.log('The component has been rendered');
+    this.agentElement.addEventListener('no key', data => console.log(data));
+    this.agentElement.addEventListener('no url', data => console.log(data));
+    this.agentElement.addEventListener('no config', data => console.log(data));
+    this.agentElement.addEventListener('empty audio', data => console.log(data));
+    this.agentElement.addEventListener('socket open', data => console.log(data));
+    this.agentElement.addEventListener('socket close', data => console.log(data));
+    this.agentElement.addEventListener('connection timeout', data => console.log(data));
+    this.agentElement.addEventListener('failed setup', data => console.log(data));
+    this.agentElement.addEventListener('failed to connect user media', data => console.log(data));
+    this.agentElement.addEventListener('unknown message', data => console.log(data));
+    this.agentElement.addEventListener('structured message', data => console.log(data));
+    this.agentElement.addEventListener('client message', data => console.log(data));
   }
 
   render() {
@@ -40,7 +115,13 @@ export class DeepgramWidget {
                 . If you do not wish to have your conversations recorded, please refrain from using this service.
               </p>
               <div class="dg-widget__terms-footer dg-widget__action-buttons">
-                <button class="dg-widget__button" onClick={() => this.toggleTerms()}>
+                <button
+                  class="dg-widget__button"
+                  onClick={() => {
+                    this.toggleTerms();
+                    this.connectAgent();
+                  }}
+                >
                   Agree
                 </button>
                 <button class="dg-widget__button dg-widget__button--secondary" onClick={() => this.toggleTerms()}>
@@ -49,7 +130,14 @@ export class DeepgramWidget {
               </div>
             </div>
             <div class={`dg-widget__avatar ${this.isTermsOpen() ? 'dg-widget__avatar--closed' : ''}`}>
-              <deepgram-orb size={64} lineWidthMultiplier={0.75}></deepgram-orb>
+              <deepgram-agent
+                ref={el => (this.agentElement = el)}
+                id="dg-agent"
+                url="wss://agent.deepgram.com/agent"
+                height="64"
+                width="64"
+                idle-timeout-ms="10000"
+              ></deepgram-agent>
             </div>
             <div class={`dg-widget__actions ${this.isTermsOpen() ? 'dg-widget__actions--closed' : ''}`}>
               <div class="dg-widget__status">
