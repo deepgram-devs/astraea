@@ -1,5 +1,9 @@
 @import '../global.css';
 
+* {
+  /* outline: 1px solid red; */
+}
+
 /*
   Deepgram Widget
 */
@@ -24,11 +28,12 @@
 
 .dg-widget__powered-by {
   font-size: 0.75em;
-  align-self: center;
+  align-self: right;
   text-align: center;
-  color: var(--el-foreground-color);
+  color: rgb(var(--el-foreground-color));
   margin: -0.5em 0 0;
   white-space: nowrap;
+  padding-right: 2.5em;
 }
 
 .dg-widget__powered-by span {
@@ -40,9 +45,9 @@
 }
 
 .dg-widget__box {
-  background-color: var(--el-background-color);
-  color: var(--el-foreground-color);
-  border: var(--el-border-width) solid var(--el-border-color);
+  background-color: rgb(var(--el-background-color));
+  color: rgb(var(--el-foreground-color));
+  border: var(--el-border-width) solid rgb(var(--el-border-color));
   display: flex;
   align-items: center;
   gap: 1em;
@@ -57,7 +62,7 @@
 .dg-widget__terms {
   display: none;
   max-width: 30em;
-  accent-color: var(--el-accent-color);
+  accent-color: rgb(var(--el-accent-color));
   flex-direction: column;
   gap: 1em;
 }
@@ -109,8 +114,8 @@
 }
 
 .dg-widget__action-buttons button {
-  background-color: var(--el-foreground-color);
-  color: var(--el-background-color);
+  background-color: rgb(var(--el-foreground-color));
+  color: rgb(var(--el-background-color));
   border-radius: 0.5em;
   padding: 0 1em;
   display: inline-flex;
@@ -125,15 +130,15 @@
 }
 
 .dg-widget__action-buttons button.dg-widget__button--secondary {
-  background-color: var(--el-background-color);
-  color: var(--el-foreground-color);
+  background-color: rgb(var(--el-background-color));
+  color: rgb(var(--el-foreground-color));
   border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
 .dg-widget__action-buttons button.dg-widget__button--text {
-  background-color: var(--el-background-color);
-  color: var(--el-foreground-color);
-  border: 1px solid var(--el-background-color);
+  background-color: rgb(var(--el-background-color));
+  color: rgb(var(--el-foreground-color));
+  border: 1px solid rgb(var(--el-background-color));
   font-weight: var(--el-font-weight);
 }
 
@@ -155,4 +160,97 @@
   text-wrap: nowrap;
   line-height: 0.625rem;
   margin: 0;
+}
+
+/* Add these new styles for the conversation container and items */
+.dg-widget__conversation {
+  font-size: 0.875rem;
+  list-style: none;
+  padding: 0;
+  margin: 0 0 1em;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.dg-widget__conversation__item {
+  animation: slideIn 0.3s ease-out forwards;
+  transform: translateX(100%);
+  max-width: 30em;
+  margin: 0.25em 0;
+}
+
+.dg-widget__conversation__item .history-item {
+  animation: slideIn 0.3s ease-out forwards, slideOut 0.5s ease-out 20s forwards;
+}
+
+.dg-widget__conversation__item--user .dg-widget__conversation__item-content {
+  background-color: rgb(var(--el-accent-color));
+  color: rgb(var(--el-background-color));
+  border-radius: 1em 1em 0.25em 1em;
+}
+
+.dg-widget__conversation__item--assistant .dg-widget__conversation__item-content {
+  background-color: rgb(var(--el-background-color));
+  border: var(--el-border-width) solid rgb(var(--el-border-color));
+  border-radius: 1em 1em 0.25em 1em;
+}
+
+.dg-widget__conversation__item-content {
+  padding: 0.75em 1em;
+}
+
+.dg-widget__conversation__item-content p {
+  margin: 0;
+  line-height: 1.4;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes blink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}
+
+.cursor-blink {
+  display: inline-block;
+  animation: blink 1s step-end infinite;
+  margin-left: 2px;
+}
+
+@keyframes fadeOut {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+@keyframes slideOut {
+  0% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(100%);
+    opacity: 0;
+    visibility: hidden;
+  }
 }
