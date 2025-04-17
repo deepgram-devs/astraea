@@ -68,7 +68,7 @@ export class DeepgramWidget {
           model: 'nova-2',
         },
         speak: {
-          model: 'aura-asteria-en',
+          model: 'aura-2-thalia-en',
         },
         think: {
           model: 'gpt-4o-mini',
