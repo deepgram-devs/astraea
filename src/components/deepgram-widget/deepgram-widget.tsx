@@ -10,16 +10,39 @@ export class DeepgramWidget {
   @Prop() clientToken: string;
 
   @State() termsOpen = false;
+  @State() termsAccepted = false;
+  @State() callActive = false;
+  @State() chatOpen = false;
+  @State() chatMessages: { role: string; content: string }[] = [];
 
+  chatBox!: HTMLDivElement;
+  widgetBox!: HTMLDivElement;
   agentElement!: HTMLElement;
-  connected = false;
 
   toggleTerms() {
     this.termsOpen = !this.termsOpen;
   }
 
+  toggleChat() {
+    this.chatOpen = !this.chatOpen;
+    if (this.chatOpen) {
+      this.scrollChatToBottom();
+    }
+  }
+
   isTermsOpen() {
     return this.termsOpen;
+  }
+
+  isChatOpen() {
+    return this.chatOpen;
+  }
+
+  scrollChatToBottom() {
+    requestAnimationFrame(() => {
+      this.chatBox.scrollTop = this.chatBox.scrollHeight;
+      this.chatBox.scrollIntoView({ behavior: 'smooth' });
+    });
   }
 
   connectAgent() {
@@ -68,13 +91,12 @@ export class DeepgramWidget {
     };
     this.agentElement.setAttribute('config', JSON.stringify(config));
     console.log(this.agentElement);
-    this.connected = true;
+    this.callActive = true;
   }
 
   disconnectAgent() {
-    this.connected = false;
+    this.callActive = false;
     this.agentElement.removeAttribute('config');
-    console.log(this.connected);
   }
 
   componentDidLoad() {
@@ -84,24 +106,52 @@ export class DeepgramWidget {
     this.agentElement.addEventListener('no config', data => console.log(data));
     this.agentElement.addEventListener('empty audio', data => console.log(data));
     this.agentElement.addEventListener('socket open', data => console.log(data));
-    this.agentElement.addEventListener('socket close', data => console.log(data));
-    this.agentElement.addEventListener('connection timeout', data => console.log(data));
-    this.agentElement.addEventListener('failed setup', data => console.log(data));
-    this.agentElement.addEventListener('failed to connect user media', data => console.log(data));
+    this.agentElement.addEventListener('socket close', data => {
+      console.log(data);
+      this.callActive = false;
+    });
+    this.agentElement.addEventListener('connection timeout', data => {
+      console.log(data);
+      this.callActive = false;
+    });
+    this.agentElement.addEventListener('failed setup', data => {
+      console.log(data);
+      this.callActive = false;
+    });
+    this.agentElement.addEventListener('failed to connect user media', data => {
+      console.log(data);
+      this.callActive = false;
+    });
     this.agentElement.addEventListener('unknown message', data => console.log(data));
-    this.agentElement.addEventListener('structured message', data => console.log(data));
     this.agentElement.addEventListener('client message', data => console.log(data));
+    this.agentElement.addEventListener('structured message', data => {
+      const { detail } = data as CustomEvent;
+      if (detail.type === 'ConversationText') {
+        this.chatMessages = [...this.chatMessages, { role: detail.role, content: detail.content }];
+        if (this.isChatOpen()) {
+          this.scrollChatToBottom();
+        }
+      }
+    });
   }
 
   render() {
     return (
       <div class="dg-widget__container">
+        <div
+          class={`dg-widget__chat ${this.isChatOpen() ? 'dg-widget__chat--open' : ''}`}
+          ref={el => (this.chatBox = el)}
+        >
+          {this.chatMessages.map(message => (
+            <p class={`dg-widget__chat-message dg-widget__chat-message-${message.role}`}>{message.content}</p>
+          ))}
+        </div>
         <div class="dg-widget__wrapper">
           <div class="dg-widget__powered-by">
             <span>Powered by Deepgram </span>
             <a href="https://deepgram.com">Voice Agent API</a>
           </div>
-          <div class="dg-widget__box">
+          <div class="dg-widget__box" ref={el => (this.widgetBox = el)}>
             <div class={`dg-widget__terms ${this.isTermsOpen() ? 'dg-widget__terms--open' : ''}`}>
               <h4 class="dg-widget__terms-header">Terms and conditions</h4>
               <p class="dg-widget__terms-content">
@@ -118,8 +168,8 @@ export class DeepgramWidget {
                 <button
                   class="dg-widget__button"
                   onClick={() => {
+                    this.termsAccepted = true;
                     this.toggleTerms();
-                    this.connectAgent();
                   }}
                 >
                   Agree
@@ -144,24 +194,76 @@ export class DeepgramWidget {
                 <span>Need help?</span>
               </div>
               <div class="dg-widget__action-buttons">
-                <button class="dg-widget__button" title="Start a call" onClick={() => this.toggleTerms()}>
-                  <svg
-                    viewBox="0 0 640 640"
-                    xmlns="http://www.w3.org/2000/svg"
-                    stroke="currentColor"
-                    fill="currentColor"
+                {this.callActive ? (
+                  <button
+                    class="dg-widget__button"
+                    title="End call"
+                    onClick={() => {
+                      this.disconnectAgent();
+                    }}
                   >
-                    <path d="M 82.6 88.6 l 104 -24 c 11.3 -2.6 22.9 3.3 27.5 13.9 l 48 112 c 4.2 9.8 1.4 21.3 -6.9 28 l -60.6 49.6 c 36 76.7 98.9 140.5 177.2 177.2 l 49.6 -60.6 c 6.8 -8.3 18.2 -11.1 28 -6.9 l 112 48 C 572.1 430.5 578 442.1 575.4 453.4 l -24 104 C 548.9 568.2 539.3 576 528 576 c -256.1 0 -464 -207.5 -464 -464 c 0 -11.2 7.7 -20.9 18.6 -23.4 z"></path>
-                  </svg>
-                  <span>Start a call</span>
-                </button>
-                <button
-                  class="dg-widget__button dg-widget__button--text"
-                  title="Start a call"
-                  onClick={() => this.toggleTerms()}
-                >
-                  Open chat
-                </button>
+                    <svg
+                      viewBox="0 0 640 640"
+                      xmlns="http://www.w3.org/2000/svg"
+                      stroke="currentColor"
+                      fill="currentColor"
+                    >
+                      <path d="M 82.6 88.6 l 104 -24 c 11.3 -2.6 22.9 3.3 27.5 13.9 l 48 112 c 4.2 9.8 1.4 21.3 -6.9 28 l -60.6 49.6 c 36 76.7 98.9 140.5 177.2 177.2 l 49.6 -60.6 c 6.8 -8.3 18.2 -11.1 28 -6.9 l 112 48 C 572.1 430.5 578 442.1 575.4 453.4 l -24 104 C 548.9 568.2 539.3 576 528 576 c -256.1 0 -464 -207.5 -464 -464 c 0 -11.2 7.7 -20.9 18.6 -23.4 z"></path>
+                    </svg>
+                    <span>End call</span>
+                  </button>
+                ) : (
+                  <button
+                    class="dg-widget__button"
+                    title="Start a call"
+                    onClick={() => {
+                      if (!this.termsAccepted) {
+                        this.toggleTerms();
+                      } else {
+                        this.connectAgent();
+                      }
+                    }}
+                  >
+                    <svg
+                      viewBox="0 0 640 640"
+                      xmlns="http://www.w3.org/2000/svg"
+                      stroke="currentColor"
+                      fill="currentColor"
+                    >
+                      <path d="M 82.6 88.6 l 104 -24 c 11.3 -2.6 22.9 3.3 27.5 13.9 l 48 112 c 4.2 9.8 1.4 21.3 -6.9 28 l -60.6 49.6 c 36 76.7 98.9 140.5 177.2 177.2 l 49.6 -60.6 c 6.8 -8.3 18.2 -11.1 28 -6.9 l 112 48 C 572.1 430.5 578 442.1 575.4 453.4 l -24 104 C 548.9 568.2 539.3 576 528 576 c -256.1 0 -464 -207.5 -464 -464 c 0 -11.2 7.7 -20.9 18.6 -23.4 z"></path>
+                    </svg>
+                    <span>Start a call</span>
+                  </button>
+                )}
+                {this.chatOpen ? (
+                  <button
+                    class="dg-widget__button dg-widget__button--text"
+                    title="Close chat"
+                    onClick={() => {
+                      if (!this.termsAccepted) {
+                        this.toggleTerms();
+                      } else {
+                        this.toggleChat();
+                      }
+                    }}
+                  >
+                    Close chat
+                  </button>
+                ) : (
+                  <button
+                    class="dg-widget__button dg-widget__button--text"
+                    title="Open chat"
+                    onClick={() => {
+                      if (!this.termsAccepted) {
+                        this.toggleTerms();
+                      } else {
+                        this.toggleChat();
+                      }
+                    }}
+                  >
+                    Open chat
+                  </button>
+                )}
               </div>
             </div>
           </div>
