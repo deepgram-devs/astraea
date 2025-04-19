@@ -67,6 +67,17 @@
   gap: 1em;
 }
 
+.dg-widget__chat {
+  display: none;
+  max-width: 30em;
+  flex-direction: column;
+  gap: 1em;
+  background: var(--el-background-color);
+  border-radius: var(--el-border-radius);
+  overflow-y: auto;
+  max-height: calc(75vh - 4em);
+}
+
 .dg-widget__terms h4.dg-widget__terms-header {
   font-size: 1.1em;
 }
@@ -86,6 +97,44 @@
 .dg-widget__terms--open {
   display: flex;
 }
+
+.dg-widget__chat--open {
+  display: flex;
+}
+
+.dg-widget__chat-message {
+  display: block;
+}
+
+.dg-widget__chat-message-assistant,
+.dg-widget__chat-message-user {
+  display: inline-block;
+  padding: 10px 15px;
+  margin: 5px 10px;
+  max-width: 70%;
+  color: white;
+  font-size: 14px;
+  line-height: 1.4;
+  border-radius: 15px;
+  position: relative;
+  word-wrap: break-word;
+}
+
+/* Assistant message - left-aligned, green bubble */
+.dg-widget__chat-message-assistant {
+  background-color: #4CAF50; /* green */
+  align-self: flex-start;
+  border-bottom-left-radius: 0;
+}
+
+/* User message - right-aligned, blue bubble */
+.dg-widget__chat-message-user {
+  background-color: #2196F3; /* blue */
+  align-self: flex-end;
+  border-bottom-right-radius: 0;
+  margin-left: auto; /* push to right */
+}
+
 
 .dg-widget__avatar {
   display: block;

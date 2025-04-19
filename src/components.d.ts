@@ -15,6 +15,7 @@ export namespace Components {
           * The agent client ID.
          */
         "agentClientId": string;
+        "clientToken": string;
     }
 }
 declare global {
@@ -42,6 +43,7 @@ declare namespace LocalJSX {
           * The agent client ID.
          */
         "agentClientId"?: string;
+        "clientToken"?: string;
     }
     interface IntrinsicElements {
         "deepgram-widget": DeepgramWidget;

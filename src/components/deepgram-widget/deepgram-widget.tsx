@@ -65,7 +65,17 @@ enum AgentEvent {
   shadow: true,
 })
 export class DeepgramWidget {
-  /**
+
+  @Prop() clientToken: string;
+
+  @State() termsAccepted = false;
+  @State() callActive = false;
+  @State() chatOpen = false;
+  @State() chatMessages: { role: string; content: string }[] = [];
+
+  chatBox!: HTMLDivElement;
+  widgetBox!: HTMLDivElement;
+    /**
    * The agent element.
    *
    * @see https://github.com/deepgram/browser-agent
