@@ -6,11 +6,23 @@
  */
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
 export namespace Components {
+    /**
+     * The Deepgram Widget component.
+     * @see https://github.com/deepgram-devs/deepgram-widget
+     */
     interface DeepgramWidget {
+        /**
+          * The agent client ID.
+         */
+        "agentClientId": string;
         "clientToken": string;
     }
 }
 declare global {
+    /**
+     * The Deepgram Widget component.
+     * @see https://github.com/deepgram-devs/deepgram-widget
+     */
     interface HTMLDeepgramWidgetElement extends Components.DeepgramWidget, HTMLStencilElement {
     }
     var HTMLDeepgramWidgetElement: {
@@ -22,7 +34,15 @@ declare global {
     }
 }
 declare namespace LocalJSX {
+    /**
+     * The Deepgram Widget component.
+     * @see https://github.com/deepgram-devs/deepgram-widget
+     */
     interface DeepgramWidget {
+        /**
+          * The agent client ID.
+         */
+        "agentClientId"?: string;
         "clientToken"?: string;
     }
     interface IntrinsicElements {
@@ -33,6 +53,10 @@ export { LocalJSX as JSX };
 declare module "@stencil/core" {
     export namespace JSX {
         interface IntrinsicElements {
+            /**
+             * The Deepgram Widget component.
+             * @see https://github.com/deepgram-devs/deepgram-widget
+             */
             "deepgram-widget": LocalJSX.DeepgramWidget & JSXBase.HTMLAttributes<HTMLDeepgramWidgetElement>;
         }
     }
