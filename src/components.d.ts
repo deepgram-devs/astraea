@@ -8,7 +8,7 @@ import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
 export namespace Components {
     /**
      * The Deepgram Widget component.
-     * @see https://github.com/deepgram/browser-agent
+     * @see https://github.com/deepgram-devs/deepgram-widget
      */
     interface DeepgramWidget {
         /**
@@ -20,7 +20,7 @@ export namespace Components {
 declare global {
     /**
      * The Deepgram Widget component.
-     * @see https://github.com/deepgram/browser-agent
+     * @see https://github.com/deepgram-devs/deepgram-widget
      */
     interface HTMLDeepgramWidgetElement extends Components.DeepgramWidget, HTMLStencilElement {
     }
@@ -35,7 +35,7 @@ declare global {
 declare namespace LocalJSX {
     /**
      * The Deepgram Widget component.
-     * @see https://github.com/deepgram/browser-agent
+     * @see https://github.com/deepgram-devs/deepgram-widget
      */
     interface DeepgramWidget {
         /**
@@ -53,7 +53,7 @@ declare module "@stencil/core" {
         interface IntrinsicElements {
             /**
              * The Deepgram Widget component.
-             * @see https://github.com/deepgram/browser-agent
+             * @see https://github.com/deepgram-devs/deepgram-widget
              */
             "deepgram-widget": LocalJSX.DeepgramWidget & JSXBase.HTMLAttributes<HTMLDeepgramWidgetElement>;
         }

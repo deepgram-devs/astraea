@@ -14,6 +14,9 @@ import {
   REDIRECTED_MESSAGES,
   REDIRECTING_MESSAGES,
   RECONNECT_MESSAGES,
+  AGENT_CLOSED_STATUSES,
+  AGENT_CONNECTED_STATUSES,
+  AGENT_RECONNECT_STATUSES,
 } from './lib/constants';
 import { changeUrl, searchAlgolia, grokPage } from './lib/functions';
 import { AlgoliaHit } from './lib/api/algolia';
@@ -480,6 +483,29 @@ docs:
   }
 
   /**
+   * Get the status text.
+   *
+   * @returns The status text.
+   */
+  connectedStatusText: string = getRandomString(AGENT_CONNECTED_STATUSES);
+
+  disconnectedStatusText: string = getRandomString(AGENT_CLOSED_STATUSES);
+
+  reconnectStatusText: string = getRandomString(AGENT_RECONNECT_STATUSES);
+
+  statusText(): string {
+    if (this.isConnected()) {
+      return this.connectedStatusText;
+    }
+
+    if (this.redirectedByAgent || this.termsAgreed) {
+      return this.reconnectStatusText;
+    }
+
+    return this.disconnectedStatusText;
+  }
+
+  /**
    * Check if the agent is connected.
    *
    * @returns Whether the agent is connected.
@@ -693,7 +719,7 @@ docs:
             </div>
             <div class={`dg-widget__actions ${this.isTermsOpen() ? 'dg-widget__actions--closed' : ''}`}>
               <div class="dg-widget__status">
-                <span>Have a question?</span>
+                <span>{this.statusText()}</span>
               </div>
               <div class="dg-widget__action-buttons">
                 <button

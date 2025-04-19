@@ -25,6 +25,32 @@ export const BASE_CONFIG = {
   },
 };
 
+export const AGENT_RECONNECT_STATUSES = [
+  'Continue where we left off?',
+  'Let’s pick up our conversation.',
+  'Continue our chat?',
+  'Shall we resume?',
+  'Shall we continue?',
+]
+
+
+export const AGENT_CONNECTED_STATUSES = [
+  'Connected and listening!',
+  'The agent is connected!',
+  'Listening...',
+  'Microphone is active!',
+  'The agent is ready and listening!',
+];
+
+export const AGENT_CLOSED_STATUSES = [
+  'Have a question?',
+  'Need assistance?',
+  'Looking for help?',
+  'Do you need support?',
+  'Have a query?',
+  'Need some guidance?',
+];
+
 export const THINKING_MESSAGES = [
   'Hmm...',
   'Uh...',
